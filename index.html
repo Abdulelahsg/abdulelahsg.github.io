@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirect to Android App</title>
-    <!-- This meta tag redirects the user to the deep link in the Android app -->
-    <meta http-equiv="refresh" content="5;url=https://abdulelahsg.github.io/Artify-Webpage/resetpassword">
     <style>
         /* Basic styling for the body */
         body {
@@ -32,7 +30,14 @@
     <!-- Main container -->
     <div class="container">
         <h1>Redirecting to Our Android App</h1>
-        <p>If you are not redirected automatically, <a href="https://abdulelahsg.github.io/Artify-Webpage/resetpassword">click here</a>.</p>
+        <p>If you are not redirected automatically, <a id="redirectLink" href="artify://abdulelahsg.github.io/Artify-Webpage/resetpassword">click here</a>.</p>
     </div>
+
+    <script>
+        // JavaScript to change the window location to the custom scheme after 5 seconds
+        setTimeout(function() {
+            window.location.href = "artify://abdulelahsg.github.io/Artify-Webpage/resetpassword";
+        }, 5000);
+    </script>
 </body>
 </html>
