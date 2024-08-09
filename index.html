@@ -3,41 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirect to Android App</title>
-    <style>
-        /* Basic styling for the body */
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        /* Styling for the main container */
-        .container {
-            max-width: 600px;
-            margin: auto;
-            border: 1px solid #ddd;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        /* Styling for the heading */
-        h1 {
-            color: #333;
-        }
-    </style>
+    <title>Redirect to Imagin8 App</title>
+    <!-- ... (rest of your head content) ... -->
 </head>
 <body>
-    <!-- Main container -->
     <div class="container">
-        <h1>Redirecting to Our Android App</h1>
-        <p>If you are not redirected automatically, <a id="redirectLink" href="artify://abdulelahsg.github.io/Artify-Webpage/resetpassword">click here</a>.</p>
+        <h1>Redirecting to Imagin8 App</h1>
+        <p>If you are not redirected automatically, <a id="redirectLink" href="#">click here</a>.</p>
     </div>
-
     <script>
-        // JavaScript to change the window location to the custom scheme after 5 seconds
-        setTimeout(function() {
-            window.location.href = "artify://abdulelahsg.github.io/Artify-Webpage/resetpassword";
-        }, 5000);
+        function getQueryParam(param) {
+            var searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get(param);
+        }
+
+        function redirect() {
+            var secret = getQueryParam('secret');
+            var email = getQueryParam('email');
+            var deepLink = `artify://resetpassword?secret=${secret}&email=${email}`;
+            
+            document.getElementById('redirectLink').href = deepLink;
+            window.location.href = deepLink;
+        }
+
+        // Redirect immediately
+        redirect();
     </script>
 </body>
 </html>
