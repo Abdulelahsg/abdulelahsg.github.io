@@ -19,8 +19,8 @@
 
         function redirect() {
             var secret = getQueryParam('secret');
-            var email = getQueryParam('email');
-            var deepLink = `artify://resetpassword?secret=${secret}&email=${email}`;
+            var userId = getQueryParam('userId');
+            var deepLink = `artify://resetpassword?secret=${secret}&email=${userId}`;
             
             document.getElementById('redirectLink').href = deepLink;
             window.location.href = deepLink;
