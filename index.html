@@ -51,7 +51,9 @@
         var error = getQueryParam('error');
         deepLink = `artify://app/oauth2/failure?error=${error}`;
     } else {
-        deepLink = 'artify://app';
+		var secret = getQueryParam('secret');
+        var userId = getQueryParam('userId');
+        var deepLink = artify://resetpassword?secret=${secret}&userId=${userId};
     }
     
     window.location.href = deepLink;
