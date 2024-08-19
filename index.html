@@ -37,30 +37,34 @@
     </div>
     <script>
         function getQueryParam(param) {
-            var searchParams = new URLSearchParams(window.location.search);
-            return searchParams.get(param);
-        }
-        
-        function redirect() {
+    var searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get(param);
+}
+
+function redirect() {
     var action = getQueryParam('action');
     var deepLink = '';
     
-    if (action === 'oauth-success') {
+    if (action === 'reset-password') {
+        var secret = getQueryParam('secret');
+        var userId = getQueryParam('userId');
+        deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
+    } else if (action === 'oauth-success') {
         deepLink = 'artify://app/oauth2/success';
     } else if (action === 'oauth-failure') {
         var error = getQueryParam('error');
         deepLink = `artify://app/oauth2/failure?error=${error}`;
     } else {
-		var secret = getQueryParam('secret');
-        var userId = getQueryParam('userId');
-        var deepLink = artify://resetpassword?secret=${secret}&userId=${userId};
+        deepLink = 'artify://app';
     }
     
     window.location.href = deepLink;
 }
-        
-        // Redirect immediately
-        redirect();
+
+// Call redirect function when the page loads
+document.addEventListener('DOMContentLoaded', (event) => {
+    redirect();
+});
     </script>
 </body>
 </html>
