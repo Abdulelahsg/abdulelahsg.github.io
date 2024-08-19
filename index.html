@@ -45,7 +45,7 @@ function redirect() {
     var action = getQueryParam('action');
     var deepLink = '';
     
-    if (action === 'reset-password') {
+    if (action === 'resetpassword') {
         var secret = getQueryParam('secret');
         var userId = getQueryParam('userId');
         deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
