@@ -3,12 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirect to Imagin8 App</title>
-    <!-- ... (rest of your head content) ... -->
+    <title>Redirecting to Imagin8 App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2196F3;
+        }
+        #redirectLink {
+            color: #2196F3;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Redirecting to Imagin8 App</h1>
+        <h1 id="statusHeader">Redirecting to Imagin8 App</h1>
         <p>If you are not redirected automatically, <a id="redirectLink" href="#">click here</a>.</p>
     </div>
     <script>
@@ -16,16 +40,33 @@
             var searchParams = new URLSearchParams(window.location.search);
             return searchParams.get(param);
         }
-
+        
         function redirect() {
-            var secret = getQueryParam('secret');
-            var userId = getQueryParam('userId');
-            var deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
+            var action = getQueryParam('action');
+            var deepLink = '';
+            
+            if (action === 'reset-password') {
+                var secret = getQueryParam('secret');
+                var userId = getQueryParam('userId');
+                deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
+                document.getElementById('statusHeader').textContent = 'Password Reset';
+            } else if (action === 'oauth-success') {
+                var userId = getQueryParam('userId');
+                deepLink = `artify://app/oauth2/success?userId=${userId}`;
+                document.getElementById('statusHeader').textContent = 'OAuth Successful';
+            } else if (action === 'oauth-failure') {
+                var error = getQueryParam('error');
+                deepLink = `artify://app/oauth2/failure?error=${error}`;
+                document.getElementById('statusHeader').textContent = 'OAuth Failed';
+            } else {
+                deepLink = 'artify://app';
+                document.getElementById('statusHeader').textContent = 'Redirecting to App';
+            }
             
             document.getElementById('redirectLink').href = deepLink;
             window.location.href = deepLink;
         }
-
+        
         // Redirect immediately
         redirect();
     </script>
