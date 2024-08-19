@@ -42,30 +42,20 @@
         }
         
         function redirect() {
-            var action = getQueryParam('action');
-            var deepLink = '';
-            
-            if (action === 'reset-password') {
-                var secret = getQueryParam('secret');
-                var userId = getQueryParam('userId');
-                deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
-                document.getElementById('statusHeader').textContent = 'Password Reset';
-            } else if (action === 'oauth-success') {
-                var userId = getQueryParam('userId');
-                deepLink = `artify://app/oauth2/success?userId=${userId}`;
-                document.getElementById('statusHeader').textContent = 'OAuth Successful';
-            } else if (action === 'oauth-failure') {
-                var error = getQueryParam('error');
-                deepLink = `artify://app/oauth2/failure?error=${error}`;
-                document.getElementById('statusHeader').textContent = 'OAuth Failed';
-            } else {
-                deepLink = 'artify://app';
-                document.getElementById('statusHeader').textContent = 'Redirecting to App';
-            }
-            
-            document.getElementById('redirectLink').href = deepLink;
-            window.location.href = deepLink;
-        }
+    var action = getQueryParam('action');
+    var deepLink = '';
+    
+    if (action === 'oauth-success') {
+        deepLink = 'artify://app/oauth2/success';
+    } else if (action === 'oauth-failure') {
+        var error = getQueryParam('error');
+        deepLink = `artify://app/oauth2/failure?error=${error}`;
+    } else {
+        deepLink = 'artify://app';
+    }
+    
+    window.location.href = deepLink;
+}
         
         // Redirect immediately
         redirect();
