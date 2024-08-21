@@ -50,13 +50,18 @@ function redirect() {
         var userId = getQueryParam('userId');
         deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
     } else if (action === 'oauth-success') {
-        deepLink = 'artify://app/oauth2/success';
+        var userId = getQueryParam('userId');
+        var secret = getQueryParam('secret');
+        deepLink = `artify://app/oauth2/success?userId=${userId}&secret=${secret}`;
     } else if (action === 'oauth-failure') {
         var error = getQueryParam('error');
         deepLink = `artify://app/oauth2/failure?error=${error}`;
     } else {
         deepLink = 'artify://app';
     }
+    
+    // Log the deepLink for debugging
+    console.log("Redirecting to:", deepLink);
     
     window.location.href = deepLink;
 }
