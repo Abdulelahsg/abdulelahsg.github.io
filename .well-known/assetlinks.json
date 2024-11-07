@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.asg.imagin8",
+    "sha256_cert_fingerprints": ["36:A3:6C:59:37:9D:B4:6F:30:E7:E4:7E:F9:CA:F5:10:A8:28:3E:C9:3B:6E:E2:3F:E1:17:D0:C0:57:EA:56:85"]
+  }
+}]
