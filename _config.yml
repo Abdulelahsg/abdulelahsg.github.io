@@ -1,0 +1,7 @@
+include: [".well-known"]
+
+defaults:
+  - scope:
+      path: ".well-known/assetlinks.json"
+    values:
+      content_type: "application/json"
