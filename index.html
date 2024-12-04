@@ -37,39 +37,35 @@
     </div>
     <script>
         function getQueryParam(param) {
-    var searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get(param);
-}
+            var searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get(param);
+        }
+        
+        function redirect() {
+            var action = getQueryParam('action');
+            var deepLink = '';
+            
+            if (action === 'reset-password') {
+                var secret = getQueryParam('secret');
+                var userId = getQueryParam('userId');
+                deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
+            } else if (action === 'oauth-success') {
+                // Simply redirect to success without passing credentials
+                deepLink = 'artify://app/oauth2/success';
+            } else if (action === 'oauth-failure') {
+                var error = getQueryParam('error');
+                deepLink = `artify://app/oauth2/failure?error=${error}`;
+            } else {
+                deepLink = 'artify://app';
+            }
+            
+            console.log("Redirecting to:", deepLink);
+            window.location.href = deepLink;
+        }
 
-function redirect() {
-    var action = getQueryParam('action');
-    var deepLink = '';
-    
-    if (action === 'reset-password') {
-        var secret = getQueryParam('secret');
-        var userId = getQueryParam('userId');
-        deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
-    } else if (action === 'oauth-success') {
-        var userId = getQueryParam('userId');
-        var secret = getQueryParam('secret');
-        deepLink = `artify://app/oauth2/success?userId=${userId}&secret=${secret}`;
-    } else if (action === 'oauth-failure') {
-        var error = getQueryParam('error');
-        deepLink = `artify://app/oauth2/failure?error=${error}`;
-    } else {
-        deepLink = 'artify://app';
-    }
-    
-    // Log the deepLink for debugging
-    console.log("Redirecting to:", deepLink);
-    
-    window.location.href = deepLink;
-}
-
-// Call redirect function when the page loads
-document.addEventListener('DOMContentLoaded', (event) => {
-    redirect();
-});
+        document.addEventListener('DOMContentLoaded', (event) => {
+            redirect();
+        });
     </script>
 </body>
 </html>
