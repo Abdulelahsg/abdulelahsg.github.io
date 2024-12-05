@@ -51,12 +51,12 @@ function redirect() {
     } else if (action === 'oauth-success') {
         var userId = getQueryParam('userId');
         var secret = getQueryParam('secret');
-        deepLink = artify://app/oauth2/success?userId=${userId}&secret=${secret};
+        deepLink = `https://abdulelahsg.github.io/oauth2/success?userId=${userId}&secret=${secret}`;
     } else if (action === 'oauth-failure') {
         var error = getQueryParam('error');
-        deepLink = artify://app/oauth2/failure?error=${error};
+        deepLink = `https://abdulelahsg.github.io/oauth2/failure?error=${error}`;
     } else {
-        deepLink = 'artify://app';
+        deepLink = 'https://abdulelahsg.github.io';
     }
 
     // Log the deepLink for debugging
