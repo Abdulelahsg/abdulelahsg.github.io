@@ -41,47 +41,37 @@
             return searchParams.get(param);
         }
 
-        function redirect() {
-            // Get all parameters first
-            var action = getQueryParam('action');
-            var userId = getQueryParam('userId');
-            var secret = getQueryParam('secret');
-            var error = getQueryParam('error');
-            
-            // Check if we're already on the success/failure page
-            var path = window.location.pathname;
-            if (path.includes('/oauth2/success') || path.includes('/oauth2/failure')) {
-                // We're already on the final redirect page, now redirect to app
-                window.location.replace(window.location.href.replace('https', 'artify'));
-                return;
-            }
+function redirect() {
+    var userId = getQueryParam('userId');
+    var secret = getQueryParam('secret');
+    
+    console.log('Parameters received:', { userId, secret });
+    
+    if (userId && secret) {
+        // Direct app deep link
+        var appDeepLink = `artify://oauth2/success?userId=${userId}&secret=${secret}`;
+        console.log('Redirecting to app:', appDeepLink);
+        
+        // Update link for manual click
+        document.getElementById('redirectLink').href = appDeepLink;
+        
+        // Try to open the app
+        window.location.href = appDeepLink;
+        
+        // Fallback after a delay if app doesn't open
+        setTimeout(function() {
+            window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
+        }, 2000);
+    } else {
+        console.log('Missing parameters');
+    }
+}
 
-            var deepLink = '';
-            if (action === 'reset-password') {
-                deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
-            } else if (action === 'oauth-success' || userId) {
-                // Either we have action=oauth-success or we already have userId
-                deepLink = `https://abdulelahsg.github.io/oauth2/success?userId=${userId}&secret=${secret}`;
-            } else if (action === 'oauth-failure' || error) {
-                deepLink = `https://abdulelahsg.github.io/oauth2/failure?error=${error || 'unknown_error'}`;
-            } else {
-                deepLink = 'https://abdulelahsg.github.io';
-            }
+// Call immediately
+redirect();
 
-            // Update the manual redirect link
-            document.getElementById('redirectLink').href = deepLink;
-            
-            // Log and perform the redirect
-            console.log("Redirecting to:", deepLink);
-			Android.log("Redirecting to:", deepLink);
-            window.location.replace(deepLink);
-        }
-
-        // Call redirect function immediately and on DOMContentLoaded
-        redirect();
-        document.addEventListener('DOMContentLoaded', (event) => {
-            redirect();
-        });
+// Also call on load
+document.addEventListener('DOMContentLoaded', redirect);
     </script>
 </body>
 </html>
