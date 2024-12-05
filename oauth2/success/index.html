@@ -1,4 +1,4 @@
-html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,37 +37,46 @@ html>
     </div>
     <script>
         function getQueryParam(param) {
-    var searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get(param);
-}
-function redirect() {
-    var action = getQueryParam('action');
-    var deepLink = '';
+            var searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get(param);
+        }
 
-    if (action === 'reset-password') {
-        var secret = getQueryParam('secret');
-        var userId = getQueryParam('userId');
-        deepLink = artify://resetpassword?secret=${secret}&userId=${userId};
-    } else if (action === 'oauth-success') {
-        var userId = getQueryParam('userId');
-        var secret = getQueryParam('secret');
-        deepLink = imagin8://app/oauth2/success?userId=${userId}&secret=${secret};
-    } else if (action === 'oauth-failure') {
-        var error = getQueryParam('error');
-        deepLink = imagin8://app/oauth2/failure?error=${error};
-    } else {
-        deepLink = 'imagin8://app';
-    }
+        function redirect() {
+            var userId = getQueryParam('userId');
+            var secret = getQueryParam('secret');
+            
+            console.log('Parameters received:', { userId, secret });
+            
+            if (userId && secret) {
+                // Create the deep link
+                var deepLink = `imagin8://oauth2/success?userId=${userId}&secret=${secret}`;
+                console.log('Redirecting to:', deepLink);
+                
+                // Update the manual redirect link
+                var redirectLink = document.getElementById('redirectLink');
+                redirectLink.href = deepLink;
+                redirectLink.textContent = 'Open in Imagin8 App';
+                
+                // Attempt the redirect
+                window.location.replace(deepLink);
+                
+                // Fallback to Play Store if app isn't installed
+                setTimeout(function() {
+                    if (!document.hidden) {
+                        window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
+                    }
+                }, 2000);
+            } else {
+                console.log('Missing parameters:', window.location.search);
+                document.getElementById('statusHeader').textContent = 'Error: Missing Parameters';
+            }
+        }
 
-    // Log the deepLink for debugging
-    console.log("Redirecting to:", deepLink);
-
-    window.location.href = deepLink;
-}
-// Call redirect function when the page loads
-document.addEventListener('DOMContentLoaded', (event) => {
-    redirect();
-});
+        // Execute redirect immediately
+        redirect();
+        
+        // Also try on page load
+        document.addEventListener('DOMContentLoaded', redirect);
     </script>
 </body>
 </html>
