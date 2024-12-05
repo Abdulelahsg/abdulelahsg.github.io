@@ -50,8 +50,25 @@
                 var userId = getQueryParam('userId');
                 deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
             } else if (action === 'oauth-success') {
-                // Simply redirect to success without passing credentials
-                deepLink = 'artify://app/oauth2/success';
+                // Get userId and secret from URL hash or query params
+                var key = getQueryParam('key');
+                var secret = getQueryParam('secret');
+                
+                // If not in query params, try getting from URL hash
+                if (!key || !secret) {
+                    var hash = window.location.hash.substring(1);
+                    var hashParams = new URLSearchParams(hash);
+                    key = hashParams.get('key');
+                    secret = hashParams.get('secret');
+                }
+                
+                if (key && secret) {
+                    deepLink = `artify://app/oauth2/success?key=${key}&secret=${secret}`;
+                } else {
+                    deepLink = 'artify://app/oauth2/success';
+                }
+                
+                console.log("OAuth success redirect:", deepLink);
             } else if (action === 'oauth-failure') {
                 var error = getQueryParam('error');
                 deepLink = `artify://app/oauth2/failure?error=${error}`;
@@ -59,12 +76,21 @@
                 deepLink = 'artify://app';
             }
             
-            console.log("Redirecting to:", deepLink);
+            // Update the manual redirect link
+            document.getElementById('redirectLink').href = deepLink;
+            
+            // Attempt automatic redirect
             window.location.href = deepLink;
         }
-
+        
         document.addEventListener('DOMContentLoaded', (event) => {
             redirect();
+            
+            // Setup click handler for manual redirect
+            document.getElementById('redirectLink').onclick = function(e) {
+                e.preventDefault();
+                redirect();
+            };
         });
     </script>
 </body>
