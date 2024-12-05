@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Authentication Failed</h1>
+    </div>
+    <script>
+        function getQueryParam(param) {
+            var searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get(param);
+        }
+
+        function redirect() {
+            var error = getQueryParam('error');
+            var deepLink = `https://abdulelahsg.github.io/oauth2/failure?error=${error || 'unknown_error'}`;
+            console.log("Redirecting to:", deepLink);
+            window.location.href = deepLink;
+        }
+
+        document.addEventListener('DOMContentLoaded', redirect);
+    </script>
+</body>
+</html>
