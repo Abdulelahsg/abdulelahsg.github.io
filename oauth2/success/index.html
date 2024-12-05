@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OAuth Callback</title>
+    <title>Redirecting to Imagin8 App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,57 +24,50 @@
         h1 {
             color: #2196F3;
         }
+        #redirectLink {
+            color: #2196F3;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Redirecting to App...</h1>
+        <h1 id="statusHeader">Redirecting to Imagin8 App</h1>
+        <p>If you are not redirected automatically, <a id="redirectLink" href="#">click here</a>.</p>
     </div>
     <script>
         function getQueryParam(param) {
-            var searchParams = new URLSearchParams(window.location.search);
-            return searchParams.get(param);
-        }
-
-        function getHashParam(param) {
-            var hash = window.location.hash.substring(1);
-            var hashParams = new URLSearchParams(hash);
-            return hashParams.get(param);
-        }
-
-function redirect() {
-    var userId = getQueryParam('userId');
-    var secret = getQueryParam('secret');
-    
-    console.log('Parameters received:', { userId, secret });
-    console.log('Current URL:', window.location.href);
-    
-    if (userId && secret) {
-        var appDeepLink = `imagin8://oauth2/success?userId=${userId}&secret=${secret}`;
-        console.log('Deep link created:', appDeepLink);
-        
-        // Update manual link
-        var redirectLink = document.getElementById('redirectLink');
-        redirectLink.href = appDeepLink;
-        redirectLink.textContent = 'Open in Imagin8 App';
-        
-        // Try opening the app
-        try {
-            window.location.href = appDeepLink;
-        } catch (e) {
-            console.error('Error redirecting:', e);
-        }
-    } else {
-        console.log('Missing parameters in URL:', window.location.search);
-        document.getElementById('statusHeader').textContent = 'Error: Missing Parameters';
-    }
+    var searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get(param);
 }
+function redirect() {
+    var action = getQueryParam('action');
+    var deepLink = '';
 
-// Execute immediately
-redirect();
+    if (action === 'reset-password') {
+        var secret = getQueryParam('secret');
+        var userId = getQueryParam('userId');
+        deepLink = artify://resetpassword?secret=${secret}&userId=${userId};
+    } else if (action === 'oauth-success') {
+        var userId = getQueryParam('userId');
+        var secret = getQueryParam('secret');
+        deepLink = imagin8://app/oauth2/success?userId=${userId}&secret=${secret};
+    } else if (action === 'oauth-failure') {
+        var error = getQueryParam('error');
+        deepLink = imagin8://app/oauth2/failure?error=${error};
+    } else {
+        deepLink = 'imagin8://app';
+    }
 
-// Also try on page load
-document.addEventListener('DOMContentLoaded', redirect);
+    // Log the deepLink for debugging
+    console.log("Redirecting to:", deepLink);
+
+    window.location.href = deepLink;
+}
+// Call redirect function when the page loads
+document.addEventListener('DOMContentLoaded', (event) => {
+    redirect();
+});
     </script>
 </body>
 </html>
