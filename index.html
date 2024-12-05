@@ -37,37 +37,50 @@
     </div>
     <script>
         function getQueryParam(param) {
-    var searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get(param);
-}
-function redirect() {
-    var action = getQueryParam('action');
-    var deepLink = '';
+            var searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get(param);
+        }
 
-    if (action === 'reset-password') {
-        var secret = getQueryParam('secret');
-        var userId = getQueryParam('userId');
-        deepLink = artify://resetpassword?secret=${secret}&userId=${userId};
-    } else if (action === 'oauth-success') {
-        var userId = getQueryParam('userId');
-        var secret = getQueryParam('secret');
-        deepLink = `https://abdulelahsg.github.io/oauth2/success?userId=${userId}&secret=${secret}`;
-    } else if (action === 'oauth-failure') {
-        var error = getQueryParam('error');
-        deepLink = `https://abdulelahsg.github.io/oauth2/failure?error=${error}`;
-    } else {
-        deepLink = 'https://abdulelahsg.github.io';
-    }
+        function redirect() {
+            // Get all parameters first
+            var action = getQueryParam('action');
+            var userId = getQueryParam('userId');
+            var secret = getQueryParam('secret');
+            var error = getQueryParam('error');
+            
+            // Check if we're already on the success/failure page
+            var path = window.location.pathname;
+            if (path.includes('/oauth2/success') || path.includes('/oauth2/failure')) {
+                // We're already on the final redirect page, now redirect to app
+                window.location.replace(window.location.href.replace('https', 'artify'));
+                return;
+            }
 
-    // Log the deepLink for debugging
-    console.log("Redirecting to:", deepLink);
+            var deepLink = '';
+            if (action === 'reset-password') {
+                deepLink = `artify://resetpassword?secret=${secret}&userId=${userId}`;
+            } else if (action === 'oauth-success' || userId) {
+                // Either we have action=oauth-success or we already have userId
+                deepLink = `https://abdulelahsg.github.io/oauth2/success?userId=${userId}&secret=${secret}`;
+            } else if (action === 'oauth-failure' || error) {
+                deepLink = `https://abdulelahsg.github.io/oauth2/failure?error=${error || 'unknown_error'}`;
+            } else {
+                deepLink = 'https://abdulelahsg.github.io';
+            }
 
-    window.location.href = deepLink;
-}
-// Call redirect function when the page loads
-document.addEventListener('DOMContentLoaded', (event) => {
-    redirect();
-});
+            // Update the manual redirect link
+            document.getElementById('redirectLink').href = deepLink;
+            
+            // Log and perform the redirect
+            console.log("Redirecting to:", deepLink);
+            window.location.replace(deepLink);
+        }
+
+        // Call redirect function immediately and on DOMContentLoaded
+        redirect();
+        document.addEventListener('DOMContentLoaded', (event) => {
+            redirect();
+        });
     </script>
 </body>
 </html>
