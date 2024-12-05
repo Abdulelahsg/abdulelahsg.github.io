@@ -42,20 +42,39 @@
             return hashParams.get(param);
         }
 
-        function redirect() {
-            var userId = getQueryParam('userId') || getHashParam('userId');
-            var secret = getQueryParam('secret') || getHashParam('secret');
-
-            if (userId && secret) {
-                var deepLink = `https://abdulelahsg.github.io/oauth2/success?userId=${userId}&secret=${secret}`;
-                console.log("Redirecting to:", deepLink);
-                window.location.href = deepLink;
-            } else {
-                console.log("Missing userId or secret");
-            }
+function redirect() {
+    var userId = getQueryParam('userId');
+    var secret = getQueryParam('secret');
+    
+    console.log('Parameters received:', { userId, secret });
+    console.log('Current URL:', window.location.href);
+    
+    if (userId && secret) {
+        var appDeepLink = `imagin8://oauth2/success?userId=${userId}&secret=${secret}`;
+        console.log('Deep link created:', appDeepLink);
+        
+        // Update manual link
+        var redirectLink = document.getElementById('redirectLink');
+        redirectLink.href = appDeepLink;
+        redirectLink.textContent = 'Open in Imagin8 App';
+        
+        // Try opening the app
+        try {
+            window.location.href = appDeepLink;
+        } catch (e) {
+            console.error('Error redirecting:', e);
         }
+    } else {
+        console.log('Missing parameters in URL:', window.location.search);
+        document.getElementById('statusHeader').textContent = 'Error: Missing Parameters';
+    }
+}
 
-        document.addEventListener('DOMContentLoaded', redirect);
+// Execute immediately
+redirect();
+
+// Also try on page load
+document.addEventListener('DOMContentLoaded', redirect);
     </script>
 </body>
 </html>

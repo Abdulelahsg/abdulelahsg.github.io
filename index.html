@@ -48,30 +48,33 @@ function redirect() {
     console.log('Parameters received:', { userId, secret });
     
     if (userId && secret) {
-        // Direct app deep link
-        var appDeepLink = `artify://oauth2/success?userId=${userId}&secret=${secret}`;
+        // Remove the extra slash in the deep link
+        var appDeepLink = `imagin8://oauth2/success?userId=${userId}&secret=${secret}`;
         console.log('Redirecting to app:', appDeepLink);
         
+        // For debugging
+        console.log('Current path:', window.location.pathname);
+        console.log('Full URL:', window.location.href);
+        
         // Update link for manual click
-        document.getElementById('redirectLink').href = appDeepLink;
+        var redirectLink = document.getElementById('redirectLink');
+        redirectLink.href = appDeepLink;
+        redirectLink.textContent = 'Click here to open app';
         
         // Try to open the app
-        window.location.href = appDeepLink;
+        window.location.replace(appDeepLink);
         
         // Fallback after a delay if app doesn't open
         setTimeout(function() {
+            if (document.hidden) {
+                return;  // App was opened successfully
+            }
             window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
         }, 2000);
     } else {
-        console.log('Missing parameters');
+        console.log('Missing parameters:', window.location.search);
     }
 }
-
-// Call immediately
-redirect();
-
-// Also call on load
-document.addEventListener('DOMContentLoaded', redirect);
     </script>
 </body>
 </html>
