@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Imagin8 App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2196F3;
+        }
+        #redirectLink {
+            color: #2196F3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="statusHeader">Redirecting to Imagin8 App</h1>
+        <p>If you are not redirected automatically, <a id="redirectLink" href="#">click here</a>.</p>
+    </div>
+    <script>
+        function getQueryParam(param) {
+            var searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get(param);
+        }
+
+        function redirect() {
+            var userId = getQueryParam('userId');
+            var secret = getQueryParam('secret');
+            
+            console.log('Parameters received:', { userId, secret });
+            
+            if (userId && secret) {
+                // Create the deep link
+                var deepLink = `imagin8://resetpassword?userId=${userId}&secret=${secret}`;
+                console.log('Redirecting to:', deepLink);
+                
+                // Update the manual redirect link
+                var redirectLink = document.getElementById('redirectLink');
+                redirectLink.href = deepLink;
+                redirectLink.textContent = 'Open in Imagin8 App';
+                
+                // Attempt the redirect
+                window.location.replace(deepLink);
+                
+                // Fallback to Play Store if app isn't installed
+                setTimeout(function() {
+                    if (!document.hidden) {
+                        window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
+                    }
+                }, 2000);
+            } else {
+                console.log('Missing parameters:', window.location.search);
+                document.getElementById('statusHeader').textContent = 'Error: Missing Parameters';
+            }
+        }
+
+        // Execute redirect immediately
+        redirect();
+        
+        // Also try on page load
+        document.addEventListener('DOMContentLoaded', redirect);
+    </script>
+</body>
+</html>
