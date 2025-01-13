@@ -4,63 +4,35 @@
     <title>Imagin8 - AI Image Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
-    function getImageId() {
-        const pathSegments = window.location.pathname.split('/');
-        return pathSegments[pathSegments.length - 1];
-    }
+        function getImageId() {
+            return window.location.pathname.split('/').pop();
+        }
 
-    function redirectToApp() {
-        const imageId = getImageId();
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        
-        if (isAndroid) {
-            // Try to open the app
-            window.location.href = `imagin8://image/${imageId}`;
+        function redirectToApp() {
+            const imageId = getImageId();
+            const isAndroid = /Android/i.test(navigator.userAgent);
             
-            // Fallback to Play Store after delay
-            setTimeout(() => {
-                window.location.href = 'https://play.google.com/store/apps/details?id=com.asg.imagin8';
-            }, 2500); // Increased timeout for slower devices
-        } else {
-            // Direct non-Android users to Play Store
-            window.location.href = 'https://play.google.com/store/apps/details?id=com.asg.imagin8';
+            if (isAndroid) {
+                window.location.href = `imagin8://image/${imageId}`;
+                
+                // Fallback to Play Store after delay
+                setTimeout(() => {
+                    window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
+                }, 2500);
+            } else {
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
+            }
         }
-    }
 
-    // Run when page loads
-    window.onload = redirectToApp;
-</script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
-        }
-        .loading {
-            margin: 20px 0;
-        }
-    </style>
+        // Run when page loads
+        window.onload = redirectToApp;
+    </script>
 </head>
 <body>
-    <div class="container">
-        <img src="../logo.png" alt="Imagin8 Logo" class="logo">
+    <div style="text-align: center; padding: 20px;">
         <h1>Imagin8 - AI Image Generator</h1>
         <p>Opening Imagin8 app...</p>
-        <p class="loading">If the app doesn't open automatically, <a href="https://play.google.com/store/apps/details?id=com.asg.imagin8">click here to download it from Google Play</a></p>
+        <p>If the app doesn't open automatically, <a href="https://play.google.com/store/apps/details?id=com.imagin8.app">click here to download it from Google Play</a></p>
     </div>
 </body>
 </html>
