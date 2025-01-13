@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
         function getImageId() {
-            return window.location.pathname.split('/').pop();
+            // Get the full path and extract the ID
+            const pathSegments = window.location.pathname.split('/');
+            const imageId = pathSegments[pathSegments.length - 1];
+            return imageId;
         }
 
         function redirectToApp() {
@@ -13,6 +16,7 @@
             const isAndroid = /Android/i.test(navigator.userAgent);
             
             if (isAndroid) {
+                // Try to open the app with the image ID
                 window.location.href = `imagin8://image/${imageId}`;
                 
                 // Fallback to Play Store after delay
@@ -20,6 +24,7 @@
                     window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
                 }, 2500);
             } else {
+                // Direct non-Android users to Play Store
                 window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
             }
         }
