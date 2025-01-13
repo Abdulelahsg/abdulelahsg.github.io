@@ -1,13 +1,15 @@
 [
   {
     "relation": [
-      "delegate_permission/common.handle_all_urls"
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
     ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.imagin8.app",
       "sha256_cert_fingerprints": [
-        "36:A3:6C:59:37:9D:B4:6F:30:E7:E4:7E:F9:CA:F5:10:A8:28:3E:C9:3B:6E:E2:3F:E1:17:D0:C0:57:EA:56:85"
+        "36:A3:6C:59:37:9D:B4:6F:30:E7:E4:7E:F9:CA:F5:10:A8:28:3E:C9:3B:6E:E2:3F:E1:17:D0:C0:57:EA:56:85",
+        "C7:E7:77:30:87:5E:D8:26:B0:C4:1E:AE:17:B2:5C:A4:28:39:F1:E2:8C:25:5E:89:FA:C5:3A:D1:CC:A1:5E:CB"
       ]
     }
   }

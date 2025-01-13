@@ -4,20 +4,16 @@
     <title>Imagin8 - AI Image Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
-        function getImageId() {
-            // Get the full path and extract the ID
-            const pathSegments = window.location.pathname.split('/');
-            const imageId = pathSegments[pathSegments.length - 1];
-            return imageId;
-        }
-
         function redirectToApp() {
-            const imageId = getImageId();
+            // Get the ID from query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const imageId = urlParams.get('id');
+            
             const isAndroid = /Android/i.test(navigator.userAgent);
             
-            if (isAndroid) {
+            if (isAndroid && imageId) {
                 // Try to open the app with the image ID
-                window.location.href = `imagin8://image/${imageId}`;
+                window.location.href = `imagin8://image?id=${imageId}`;
                 
                 // Fallback to Play Store after delay
                 setTimeout(() => {
@@ -28,12 +24,9 @@
                 window.location.href = 'https://play.google.com/store/apps/details?id=com.imagin8.app';
             }
         }
-
-        // Run when page loads
-        window.onload = redirectToApp;
     </script>
 </head>
-<body>
+<body onload="redirectToApp()">
     <div style="text-align: center; padding: 20px;">
         <h1>Imagin8 - AI Image Generator</h1>
         <p>Opening Imagin8 app...</p>
